@@ -17,30 +17,32 @@ public class DashboardServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
         
+        // 1. Recuperar los datos desde la Sesión
         HttpSession session = request.getSession();
         String nombre = (String) session.getAttribute("usuarioLogueado");
         String correo = (String) session.getAttribute("correoLogueado");
         String rol = (String) session.getAttribute("rolUsuario");
 
-        // 1. Leer el dato del formulario (Payload actual)
+        // 2. Leer el dato enviado por el formulario (Payload de la petición actual)
         String temaFormulario = request.getParameter("tema");
         if (temaFormulario == null) {
             temaFormulario = "No enviado";
         }
 
-        // 2. Leer la Cookie (Estado previo persistido)
-        String temaCookie = "claro"; // Valor por defecto del sistema
+        // 3. Leer la Cookie (Estado previo almacenado en el navegador)
+        String temaCookie = "claro"; // Valor por defecto
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie c : cookies) {
-                if (c.getName().equals("temaVisual")) {
+                if ("temaVisual".equals(c.getName())) {
                     temaCookie = c.getValue();
                 }
             }
         }
 
-        // 3. Aplicación estricta de la regla: 
-        // El CSS se genera EXCLUSIVAMENTE leyendo el valor de la cookie, ignorando el formulario.
+        // 4. Lógica de Aplicación Estricta:
+        // El modo visual depende EXCLUSIVAMENTE de la galleta leída.
+        // Se ignora el valor de 'temaFormulario' para la definición del CSS.
         String claseCss = "oscuro".equals(temaCookie) ? "tema-oscuro" : "";
 
         response.setContentType("text/html;charset=UTF-8");
@@ -49,7 +51,7 @@ public class DashboardServlet extends HttpServlet {
         out.println("<!DOCTYPE html>");
         out.println("<html class='" + claseCss + "'>");
         out.println("<head>");
-        out.println("<title>Panel de Control</title>");
+        out.println("<title>Panel de Control - Demo session</title>");
         out.println("<style>");
         out.println("body { font-family: Arial, sans-serif; background-color: #ffffff; color: #333333; transition: background-color 0.3s, color 0.3s; padding: 20px; }");
         out.println(".tema-oscuro body { background-color: #1a1a1a; color: #e0e0e0; }");
@@ -63,8 +65,8 @@ public class DashboardServlet extends HttpServlet {
         out.println("<ul>");
         out.println("<li><strong>Correo:</strong> " + correo + "</li>");
         out.println("<li><strong>Nivel de Acceso (Sesión):</strong> " + rol + "</li>");
-        out.println("<li><strong>Tema en Request (Formulario):</strong> " + temaFormulario + "</li>");
-        out.println("<li><strong>Tema en Cabecera (Cookie leída):</strong> " + temaCookie + "</li>");
+        out.println("<li><strong>Dato enviado en Formulario:</strong> " + temaFormulario + "</li>");
+        out.println("<li><strong>Dato leído desde Galleta:</strong> " + temaCookie + "</li>");
         out.println("</ul>");
         
         out.println("<br>");
