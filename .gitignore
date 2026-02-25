@@ -1,0 +1,10 @@
+# Archivos de compilación de Maven
+target/
+*.war
+*.class
+
+# Archivos de configuración locales de VS Code o Eclipse
+.vscode/
+.settings/
+.project
+.classpath
