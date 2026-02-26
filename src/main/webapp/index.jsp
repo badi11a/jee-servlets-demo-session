@@ -26,15 +26,21 @@
     <h2>Demo session</h2>
     <p>Ingresa tus datos y preferencias:</p>
     
-    <form action="login" method="GET">
+    <%-- Captura de error enviado desde el Servlet --%>
+    <% if (request.getParameter("error") != null) { %>
+        <p style="color: #ff0000; font-weight: bold;">Error: Todos los campos son obligatorios.</p>
+    <% } %>
+
+    <form action="login" method="POST">
         <label for="nombre">Nombre de usuario:</label>
-        <input type="text" id="nombre" name="nombre" required><br><br>
+        <input type="text" id="nombre" name="nombre"><br><br>
 
         <label for="correo">Correo electrónico:</label>
-        <input type="email" id="correo" name="correo" required><br><br>
+        <input type="email" id="correo" name="correo"><br><br>
 
-        <label for="tema">Preferencia visual:</label>
+       <label for="tema">Preferencia visual:</label>
         <select id="tema" name="tema">
+            <option value="" selected>Mantener mi tema actual</option>
             <option value="claro">Modo Claro</option>
             <option value="oscuro">Modo Oscuro</option>
         </select><br><br>
